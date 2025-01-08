@@ -1,0 +1,46 @@
+# This is a basic workflow that is manually triggered
+
+name: modelo_train
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'Name of the workflow trigger'
+        default: 'World'
+        required: true
+        type: string
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "train_model"
+  train_model:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Check out the repository
+      - uses: actions/checkout@v3
+
+      # Setup the environment
+      - uses: interactive/setup-cml@v1
+
+      # Train the model and generate reports
+      - name: Train and Report
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Running training for ${{ inputs.name }}..."
+          pip install -r requirements.txt
+          python train_model.py
+
+          echo "RF and LR Model Score" > report.md
+          cat report.txt
+
+          echo "Confusion Matrix & Feature Importance" > report1.md
+          echo '![](./ConfusionMatrix.png "ConfusionMatrix")' >> report1.md
+          echo '![](./FeatureImportance.png "FeatureImportance")' >> report1.md
