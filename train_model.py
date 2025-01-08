@@ -9,6 +9,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, precision_score, f1_score, recall_score
 sns.set(style='white')
+import warnings
+warnings.filterwarnings('ignore')
 
 #Load Data
 dataset = pd.read_csv('iris.csv')
